@@ -1,0 +1,189 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+
+:root {
+    --map-bg-color: rgb(34, 34, 34);
+}
+
+body {
+    background-color: var(--map-bg-color);
+
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+    margin: 0;
+
+    color: white;
+}
+
+header {
+    padding: 1em;
+    padding-top: 2.5em;
+
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+}
+
+header > h1, h3 {
+    margin: 0;
+}
+
+header > h1 {
+    font-family: "Lora", serif;
+}
+
+header > h3 {
+    font-family: "Ma Shan Zheng", cursive;
+}
+
+header > #date {
+    color: rgb(180, 180, 180)
+}
+
+header > #description {
+    color: rgb(180, 150, 150);
+    font-size: 1em;
+    font-family: "Quicksand", sans-serif;
+}
+
+main {
+    flex-grow: 1;
+}
+
+footer {
+    padding: 0.5em;
+    text-align: center;
+    font-family: "JetBrains Mono", monospace;
+    color: rgb(255, 200, 255);
+    font-size: 1em;
+}
+
+a {
+    color: rgb(200, 150, 255);
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    text-underline-offset: 2px;
+}
+
+#map {
+    height: 100%;
+    background-color: var(--map-bg-color);
+}
+
+#map:focus {
+    outline: none;
+}
+
+.leaflet-popup-content {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+}
+
+.leaflet-popup-content * {
+    margin: 0!important;
+}
+
+.cover {
+    width: 20em;
+    border-radius: 1em;
+    transition: transform ease 300ms;
+}
+
+.cover:hover {
+    transform: scale(102%);
+}
+
+#gallery-wrapper {
+    z-index: 500;
+    position: fixed;
+    display: none;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.75);
+    cursor: pointer;
+}
+
+#gallery {
+    width: 100%;
+    height: 100%;
+}
+
+#gallery-close-btn {
+    z-index: 1000;
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    width: 5em;
+}
+
+.swiper {
+    width: 100%;
+    height: 100%;
+}
+
+.swiper-slide-styles {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    padding: 0;
+}
+
+.swiper-slide-inner {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.5em;
+}
+
+.swiper-slide-inner img {
+   flex-grow: 1;
+}
+
+.swiper-slide-inner p {
+    font-size: 1em;
+}
+
+/* ------------------------------- */
+
+.swiper-slide-inner-1 {
+    width: 100%;
+    height: 100%;
+    padding: 1em;
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    justify-content: center;
+    align-items: center;
+}
+
+.slide-image-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-grow: 1;
+    min-height: 0;
+}
+
+.slide-image-wrapper img {
+    display: block;
+    max-height: full;
+    width: auto;
+}
+
+.swiper-slide-inner-1 p {
+    text-align: center;
+}
