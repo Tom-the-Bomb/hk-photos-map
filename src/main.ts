@@ -10,26 +10,12 @@ import 'swiper/swiper-bundle.css';
 
 import './style.css';
 
-function getImageHTML1(image: string) {
-    return `<div class="swiper-slide-inner">
-        <img
-            src="${image}"
-            alt="photo"
-        />
-        <p>1</p>
-    </div>`;
-}
-
 function getImageHTML(image: string) {
-    return `<div class="swiper-slide-inner-1">
-        <div class="slide-image-wrapper">
-            <img
-                src="${image}"
-                alt="photo"
-            />
-        </div>
-        <p>1</p>
-    </div>`;
+    return `<img
+        src="${image}"
+        alt="photo"
+    />
+    <p>1</p>`;
 }
 
 let swiper: Swiper | null = null;
