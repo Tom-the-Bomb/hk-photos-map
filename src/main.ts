@@ -48,8 +48,6 @@ L.tileLayer(
 
 async function sortGPSData() {
     for (let image in images) {
-        image = image.replace('/public', '');
-
         const {latitude, longitude} = await exifr.gps(image);
         console.log('AAAAA');
         const coord = JSON.stringify([latitude, longitude]);
@@ -67,7 +65,7 @@ sortGPSData().then(() => {
         const [latitude, longitude] = JSON.parse(coord);
         const cover = images[0];
 
-        L.circleMarker([latitude, longitude])
+        L.marker([latitude, longitude], {icon: cover.includes('mtr') ? mtrMarker : orangeMarker})
             .addTo(map)
             .bindPopup(
                 `<img class="cover" src="${cover}" alt="${cover}"/>
