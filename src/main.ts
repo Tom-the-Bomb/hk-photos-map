@@ -8,22 +8,16 @@ import { Keyboard, EffectCoverflow } from 'swiper/modules';
 
 import 'swiper/swiper-bundle.css';
 
-import { getImageHTML } from './utils';
+import { getImageHTML, getMarker } from './utils';
 import './style.css';
 
 let swiper: Swiper | null = null;
 
 const images = import.meta.glob('/public/assets/**/*.jpg');
-const markers = new Map<string, Array<string>>();
+const markers = new Map<string, string[]>();
 
-const markerIcon = new L.Icon({
-    iconUrl: 'marker.png',
-    shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
-    iconSize: [25, 41],
-    iconAnchor: [12, 41],
-    popupAnchor: [1, -34],
-    shadowSize: [41, 41],
-});
+const orangeMarker = getMarker('orange-marker.png');
+const mtrMarker = getMarker('mtr-marker.png');
 
 const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
@@ -64,68 +58,74 @@ for (const [coord, images] of markers) {
     const [latitude, longitude] = JSON.parse(coord);
     const cover = images[0];
 
-    L.marker([latitude, longitude], {icon: markerIcon})
+    L.marker([latitude, longitude], {icon: images[0].includes('mtr') ? mtrMarker : orangeMarker})
         .addTo(map)
         .bindPopup(
             `<img class="cover" src="${cover}" alt="${cover}"/>
             <p class="cover-caption">${images.length} photo${images.length > 1 ? 's' : ''}</p>`
         )
         .on('click', (event) => {
-            event.target
+            const popUp = event.target
                 .getPopup()
-                .openPopup()
-                .getElement()
-                .addEventListener('click', async () => {
-                    map.dragging.disable();
-                    map.touchZoom.disable();
-                    map.doubleClickZoom.disable();
-                    map.scrollWheelZoom.disable();
-                    map.boxZoom.disable();
-                    map.keyboard.disable();
+                .openPopup();
 
-                    if (images.length > 1) {
-                        document.getElementById('gallery')!.innerHTML = `
-                            <div class="swiper">
-                                <div class="swiper-wrapper">
-                                    ${
-                                        (await Promise.all(
-                                            images.map(async (image) =>
-                                                `<div class="swiper-slide swiper-slide-styles">
-                                                    ${await getImageHTML(image)}
-                                                </div>`
-                                            )
-                                        ))
-                                            .join('')
-                                    }
-                                </div>
-                            </div>`;
+            const popUpElement = popUp.getElement();
 
-                        swiper = new Swiper('.swiper', {
-                            modules: [Keyboard, EffectCoverflow],
-                            effect: 'coverflow',
-                            loop: true,
-                            grabCursor: true,
-                            centeredSlides: true,
-                            keyboard: true,
-                            direction: 'vertical',
-                            breakpoints: {
-                                768: {
-                                    direction: 'horizontal',
-                                },
+            popUpElement.addEventListener('click', async () => {
+                map.dragging.disable();
+                map.touchZoom.disable();
+                map.doubleClickZoom.disable();
+                map.scrollWheelZoom.disable();
+                map.boxZoom.disable();
+                map.keyboard.disable();
+
+                if (images.length > 1) {
+                    document.getElementById('gallery')!.innerHTML = `
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                ${
+                                    (await Promise.all(
+                                        images.map(async (image) =>
+                                            `<div class="swiper-slide swiper-slide-styles">
+                                                ${await getImageHTML(image)}
+                                            </div>`
+                                        )
+                                    ))
+                                        .join('')
+                                }
+                            </div>
+                        </div>`;
+
+                    swiper = new Swiper('.swiper', {
+                        modules: [Keyboard, EffectCoverflow],
+                        effect: 'coverflow',
+                        loop: true,
+                        grabCursor: true,
+                        centeredSlides: true,
+                        keyboard: true,
+                        direction: 'vertical',
+                        breakpoints: {
+                            768: {
+                                direction: 'horizontal',
                             },
-                        });
-                    } else {
-                        gallery.innerHTML =
-                            `<div class="swiper-slide-styles">
-                                ${await getImageHTML(images[0])}
-                            </div>`;
-                    }
+                        },
+                    });
+                } else {
+                    gallery.innerHTML =
+                        `<div class="swiper-slide-styles">
+                            ${await getImageHTML(images[0])}
+                        </div>`;
+                }
 
-                    galleryWrapper.style.display = 'block';
+                galleryWrapper.style.display = 'block';
+            });
+
+            popUpElement.querySelector('.leaflet-popup-close-button')
+                ?.addEventListener('click', (event: Event) => {
+                    event.stopPropagation();
                 });
         });
 }
-
 
 document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     gallery.innerHTML = '';

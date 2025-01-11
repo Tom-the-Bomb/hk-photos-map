@@ -181,6 +181,49 @@ coords = [
     """22°18'48.9"N 113°55'47.0"E""",
 ]
 
+to_add = [
+    ('public/assets/others/20241230_100308100_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241230_102600000_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241230_103000000_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241230_103400000_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241230_103500000_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241230_103600000_iOS.jpg', """22°16'41.4"N 114°08'48.5"E"""),
+    ('public/assets/others/20241231_034900000_iOS.jpg', """22°17'39.9"N 114°10'06.8"E"""),
+    ('public/assets/others/20241231_063900000_iOS.jpg', """22°17'40.5"N 114°10'18.7"E"""),
+    ('public/assets/others/20241231_101600000_iOS.jpg', """22°17'56.1"N 114°09'21.1"E"""),
+]
+
+def process_to_add(*, quality: int = 100) -> None:
+    for path, raw in to_add:
+        with Image.open(path) as img:
+            exif = img.getexif()
+
+            gps = exif.get_ifd(IFD.GPSInfo)
+
+            lat, long = raw.split()
+
+            lat, lat_ref = lat[:-2], lat[-1]
+            long, long_ref = long[:-2], long[-1]
+
+            lat = tuple(map(float, lat.replace('°', "'").split("'")))
+            long = tuple(map(float, long.replace('°', "'").split("'")))
+
+            gps[GPS.GPSLatitude] = lat
+            gps[GPS.GPSLatitudeRef] = lat_ref
+            gps[GPS.GPSLongitude] = long
+            gps[GPS.GPSLongitudeRef] = long_ref
+
+            exif[IFD.GPSInfo] = gps
+
+            img.save(
+                path,
+                format='JPEG',
+                quality=quality,
+                exif=exif,
+            )
+
+            print(f'Manually saved GPS info for [{path}]')
+
 def process(
     directory: str,
     *,
@@ -224,4 +267,4 @@ def process(
                 print('GPS info already exists.')
 
 if __name__ == '__main__':
-    process('./public/assets/others')
+    process_to_add()

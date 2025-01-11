@@ -161,5 +161,6 @@ a:hover {
 }
 
 .swiper-slide-styles p {
+    text-align: center;
     font-family: 'Titillium Web', sans-serif;
 }
