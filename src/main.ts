@@ -13,7 +13,7 @@ import './style.css';
 
 let swiper: Swiper | null = null;
 
-const images = import.meta.glob('/public/assets/**/*.jpg');
+const images = import.meta.glob('/src/assets/**/*.jpg');
 const markers = new Map<string, string[]>();
 
 const orangeMarker = getMarker('orange-marker.png');
