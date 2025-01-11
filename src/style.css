@@ -2,6 +2,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300..700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,200;0,300;0,400;0,600;0,700;0,900;1,200;1,300;1,400;1,600;1,700&display=swap');
 
 :root {
     --map-bg-color: rgb(34, 34, 34);
@@ -33,11 +34,11 @@ header > h1, h3 {
 }
 
 header > h1 {
-    font-family: "Lora", serif;
+    font-family: 'Lora', serif;
 }
 
 header > h3 {
-    font-family: "Ma Shan Zheng", cursive;
+    font-family: 'Ma Shan Zheng', cursive;
 }
 
 header > #date {
@@ -47,7 +48,7 @@ header > #date {
 header > #description {
     color: rgb(180, 150, 150);
     font-size: 1em;
-    font-family: "Quicksand", sans-serif;
+    font-family: 'Quicksand', sans-serif;
 }
 
 main {
@@ -57,7 +58,7 @@ main {
 footer {
     padding: 0.5em;
     text-align: center;
-    font-family: "JetBrains Mono", monospace;
+    font-family: 'JetBrains Mono', monospace;
     color: rgb(255, 200, 255);
     font-size: 1em;
 }
@@ -101,6 +102,14 @@ a:hover {
     transform: scale(102%);
 }
 
+.cover-caption {
+    cursor: pointer;
+}
+
+.cover-caption:hover {
+    filter: brightness(170%);
+}
+
 #gallery-wrapper {
     z-index: 1000;
     position: fixed;
@@ -109,6 +118,9 @@ a:hover {
     top: 0;
     background-color: rgba(0, 0, 0, 0.75);
     cursor: pointer;
+
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
 }
 
 #gallery-close-btn {
@@ -122,18 +134,32 @@ a:hover {
 #gallery, #gallery-wrapper,
 .swiper, .swiper-wrapper,
 .swiper-slide-styles {
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
 }
 
 .swiper-slide-styles {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    gap: 2em;
     align-items: center;
 }
 
-.swiper-slide-inner img {
-    max-height: 100%;
-    width: fit-content;
+/* I absolutely hate CSS so much
+
+<https://stackoverflow.com/questions/61589592/flexbox-flex-1-grows-too-large-when-img-is-too-big-with-height-100>
+*/
+.gallery-image-wrapper {
+    flex: 1;
+    min-height: 0;
+}
+
+.gallery-image-wrapper img {
+    height: 100%;
+    padding: 2em;
+}
+
+.swiper-slide-styles p {
+    font-family: 'Titillium Web', sans-serif;
 }

@@ -8,15 +8,8 @@ import { Keyboard, EffectCoverflow } from 'swiper/modules';
 
 import 'swiper/swiper-bundle.css';
 
+import { getImageHTML } from './utils';
 import './style.css';
-
-function getImageHTML(image: string) {
-    return `<img
-        src="${image}"
-        alt="photo"
-    />
-    <p>1</p>`;
-}
 
 let swiper: Swiper | null = null;
 
@@ -82,7 +75,7 @@ for (const [coord, images] of markers) {
                 .getPopup()
                 .openPopup()
                 .getElement()
-                .addEventListener('click', () => {
+                .addEventListener('click', async () => {
                     map.dragging.disable();
                     map.touchZoom.disable();
                     map.doubleClickZoom.disable();
@@ -95,11 +88,14 @@ for (const [coord, images] of markers) {
                             <div class="swiper">
                                 <div class="swiper-wrapper">
                                     ${
-                                        images.map((image) =>
-                                            `<div class="swiper-slide swiper-slide-styles">
-                                                ${getImageHTML(image)}
-                                            </div>`
-                                        )
+                                        (await Promise.all(
+                                            images.map(async (image) =>
+                                                `<div class="swiper-slide swiper-slide-styles">
+                                                    ${await getImageHTML(image)}
+                                                </div>`
+                                            )
+                                        ))
+                                            .join('')
                                     }
                                 </div>
                             </div>`;
@@ -121,7 +117,7 @@ for (const [coord, images] of markers) {
                     } else {
                         gallery.innerHTML =
                             `<div class="swiper-slide-styles">
-                                ${getImageHTML(images[0])}
+                                ${await getImageHTML(images[0])}
                             </div>`;
                     }
 
@@ -129,6 +125,7 @@ for (const [coord, images] of markers) {
                 });
         });
 }
+
 
 document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     gallery.innerHTML = '';
