@@ -51,6 +51,7 @@ async function sortGPSData() {
         image = image.replace('/public', '');
 
         const {latitude, longitude} = await exifr.gps(image);
+        console.log('AAAAA');
         const coord = JSON.stringify([latitude, longitude]);
 
         if (!markers.has(coord)) {
@@ -62,8 +63,6 @@ async function sortGPSData() {
 }
 
 sortGPSData().then(() => {
-    console.log('AAAAA');
-
     for (const [coord, images] of markers) {
         const [latitude, longitude] = JSON.parse(coord);
         const cover = images[0];
