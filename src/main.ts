@@ -1,7 +1,7 @@
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
-import exifr from "exifr";
+import exifr from 'exifr';
 
 import Swiper from 'swiper';
 import { Keyboard, EffectCoverflow } from 'swiper/modules';
@@ -11,13 +11,16 @@ import 'swiper/swiper-bundle.css';
 import { getImageHTML, getMarker } from './utils';
 import './style.css';
 
+import orangeMarkerAsset from '@assets/orange-marker.png';
+import mtrMarkerAsset from '@assets/mtr-marker.png';
+
 let swiper: Swiper | null = null;
 
-const images = import.meta.glob('/src/assets/**/*.jpg');
+const images = import.meta.glob('@assets/**/*.jpg');
 const markers = new Map<string, string[]>();
 
-const orangeMarker = getMarker('orange-marker.png');
-const mtrMarker = getMarker('mtr-marker.png');
+const orangeMarker = getMarker(orangeMarkerAsset);
+const mtrMarker = getMarker(mtrMarkerAsset);
 
 const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
@@ -47,7 +50,7 @@ L.tileLayer(
     .addTo(map);
 
 async function sortGPSData() {
-    for (let image in images) {
+    for (const image in images) {
         const {latitude, longitude} = await exifr.gps(image);
         console.log('AAAAA');
         const coord = JSON.stringify([latitude, longitude]);
