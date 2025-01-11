@@ -23,7 +23,11 @@ const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
 
 const map = L
-    .map('map', {zoomControl: false, renderer: L.canvas()})
+    .map('map', {
+        zoomControl: false,
+        renderer: L.canvas(),
+        preferCanvas: true,
+    })
     .setView([22.288, 114.173], 13)
     .setMaxBounds([
         // top-left corner
@@ -37,6 +41,7 @@ L.tileLayer(
     {
         minZoom: 11,
         maxZoom: 19,
+        crossOrigin: true,
     }
 )
     .addTo(map);
@@ -57,14 +62,15 @@ async function sortGPSData() {
 }
 
 sortGPSData().then(() => {
+    console.log('AAAAA');
+
     for (const [coord, images] of markers) {
         const [latitude, longitude] = JSON.parse(coord);
         const cover = images[0];
 
-        const marker = L.marker([latitude, longitude], {icon: images[0].includes('mtr') ? mtrMarker : orangeMarker})
-            .addTo(map);
-
-        marker.bindPopup(
+        L.circleMarker([latitude, longitude])
+            .addTo(map)
+            .bindPopup(
                 `<img class="cover" src="${cover}" alt="${cover}"/>
                 <p class="cover-caption">${images.length} photo${images.length > 1 ? 's' : ''}</p>`
             )
