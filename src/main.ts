@@ -27,11 +27,7 @@ const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
 
 const map = L
-    .map('map', {
-        zoomControl: false,
-        renderer: L.canvas(),
-        preferCanvas: true,
-    })
+    .map('map', {zoomControl: false})
     .setView([22.288, 114.173], 13)
     .setMaxBounds([
         // top-left corner
