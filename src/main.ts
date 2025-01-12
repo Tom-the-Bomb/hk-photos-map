@@ -23,7 +23,7 @@ const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
 
 const allImages: string[] = Object.values(
-    import.meta.glob('./assets/**/*.jpg', { eager: true, query: '?url', import: 'default' })
+    import.meta.glob('./assets/**/*.avif', { eager: true, query: '?url', import: 'default' })
 );
 
 const map = L
