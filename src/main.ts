@@ -67,7 +67,6 @@ function setGalleryContent(images: string[]) {
         swiper = new Swiper('.swiper', {
             modules: [Keyboard, EffectCoverflow],
             effect: 'coverflow',
-            loop: true,
             grabCursor: true,
             centeredSlides: true,
             keyboard: true,
@@ -104,9 +103,7 @@ function getOpenGalleryHandler(images: string[], isAllImages: boolean) {
         map.boxZoom.disable();
         map.keyboard.disable();
 
-        if (!isAllImages || !isDisplayingAllImages) {
-            setGalleryContent(images);
-        }
+        setGalleryContent(images);
 
         galleryWrapper.style.display = 'block';
     }
