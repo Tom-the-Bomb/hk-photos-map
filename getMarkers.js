@@ -23,7 +23,7 @@ async function readGPSData() {
                 markers[coord] = [];
             }
 
-            markers[coord].push(image.replace('./src', '.'));
+            markers[coord].push(image);
         }
     }
     return markers;

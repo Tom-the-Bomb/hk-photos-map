@@ -42,8 +42,11 @@ L.tileLayer(
 )
     .addTo(map);
 
-for (const [coord, images] of Object.entries(markers)) {
+for (const [coord, rawPaths] of Object.entries(markers)) {
     const [latitude, longitude] = JSON.parse(coord);
+    const images = rawPaths.map((image) =>
+        import.meta.env.DEV ? image : image.replace('/src', '')
+    );
     const cover = images[0];
 
     L.marker([latitude, longitude], {icon: cover.includes('mtr') ? mtrMarker : orangeMarker})
