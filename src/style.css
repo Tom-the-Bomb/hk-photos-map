@@ -169,7 +169,7 @@ a:hover {
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 3em;
+    gap: 1em;
 }
 
 /* I absolutely hate CSS so much
@@ -179,14 +179,27 @@ a:hover {
 .gallery-image-wrapper {
     flex: 1;
     min-height: 0;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    padding-top: 3em;
+    padding-left: 1em;
+    padding-right: 1em;
 }
 
 .gallery-image-wrapper img {
-    height: 100%;
-    padding: 3em;
+    max-height: 100%;
+    max-width: 100%;
 }
 
 .swiper-slide-styles p {
     text-align: center;
     font-family: 'Titillium Web', sans-serif;
+
+    margin-top: 0;
+    margin-bottom: 2em;
+    margin-left: 1em;
+    margin-right: 1em;
 }

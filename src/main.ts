@@ -26,8 +26,6 @@ const allImages: string[] = Object.values(
     import.meta.glob('./assets/**/*.avif', { eager: true, query: '?url', import: 'default' })
 );
 
-let lastDisplayed = 'all';
-
 const map = L
     .map('map', {zoomControl: false})
     .setView([22.288, 114.173], 13)
@@ -48,53 +46,7 @@ L.tileLayer(
 )
     .addTo(map);
 
-function setGalleryContent(images: string[]) {
-    if (images.length > 1) {
-        gallery.innerHTML = `
-            <div class="swiper">
-                <div class="swiper-wrapper">
-                    ${
-                        images.map((image) =>
-                            `<div class="swiper-slide swiper-slide-styles">
-                                ${getImageHTML(image)}
-                            </div>`
-                        )
-                            .join('')
-                    }
-                </div>
-            </div>`;
-
-        swiper = new Swiper('.swiper', {
-            modules: [Keyboard, EffectCoverflow],
-            effect: 'coverflow',
-            grabCursor: true,
-            centeredSlides: true,
-            keyboard: true,
-            loop: true,
-            spaceBetween: 45,
-            direction: 'vertical',
-            breakpoints: {
-                768: {
-                    direction: 'horizontal',
-                },
-            },
-        });
-    } else {
-        gallery.innerHTML =
-            `<div class="swiper-slide-styles">
-                ${getImageHTML(images[0])}
-            </div>`;
-    }
-
-    gallery.querySelectorAll('.swiper-slide-styles')
-        ?.forEach(async (slide) => {
-            slide.querySelector('p')!.innerHTML = await formatImageEXIF(
-                slide.querySelector('img')!
-            );
-        });
-}
-
-function getOpenGalleryHandler(images: string[], displaying: string) {
+function getOpenGalleryHandler(images: string[]) {
     return async () => {
         map.dragging.disable();
         map.touchZoom.disable();
@@ -103,15 +55,51 @@ function getOpenGalleryHandler(images: string[], displaying: string) {
         map.boxZoom.disable();
         map.keyboard.disable();
 
-        if (lastDisplayed !== displaying) {
-            setGalleryContent(images);
-        } else if (swiper != null) {
-            swiper.enable();
+        if (images.length > 1) {
+            gallery.innerHTML = `
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        ${
+                            images.map((image) =>
+                                `<div class="swiper-slide swiper-slide-styles">
+                                    ${getImageHTML(image)}
+                                </div>`
+                            )
+                                .join('')
+                        }
+                    </div>
+                </div>`;
+
+            swiper = new Swiper('.swiper', {
+                modules: [Keyboard, EffectCoverflow],
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                keyboard: true,
+                loop: true,
+                spaceBetween: 45,
+                direction: 'vertical',
+                breakpoints: {
+                    768: {
+                        direction: 'horizontal',
+                    },
+                },
+            });
+        } else {
+            gallery.innerHTML =
+                `<div class="swiper-slide-styles">
+                    ${getImageHTML(images[0])}
+                </div>`;
         }
 
-        lastDisplayed = displaying;
-
         galleryWrapper.style.display = 'block';
+
+        gallery.querySelectorAll('.swiper-slide-styles')
+            ?.forEach(async (slide) => {
+                slide.querySelector('p')!.innerHTML = await formatImageEXIF(
+                    slide.querySelector('img')!
+                );
+            });
     }
 }
 
@@ -135,7 +123,7 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 
             const popUpElement = popUp.getElement();
 
-            popUpElement.addEventListener('click', getOpenGalleryHandler(images, coord));
+            popUpElement.addEventListener('click', getOpenGalleryHandler(images));
             popUpElement.querySelector('.leaflet-popup-close-button')
                 ?.addEventListener('click', (event: Event) => {
                     event.stopPropagation();
@@ -147,7 +135,7 @@ document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     galleryWrapper.style.display = 'none';
 
     if (swiper != null) {
-        swiper.disable();
+        swiper.destroy();
     }
 
     map.dragging.enable();
@@ -158,8 +146,6 @@ document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     map.keyboard.enable();
 });
 
-setGalleryContent(allImages);
-
 document.getElementById('view-all')?.addEventListener('click',
-    getOpenGalleryHandler(allImages, 'all')
+    getOpenGalleryHandler(allImages)
 );
