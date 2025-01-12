@@ -168,7 +168,7 @@ a:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 2em;
+    gap: 3em;
     align-items: center;
 }
 
@@ -183,7 +183,7 @@ a:hover {
 
 .gallery-image-wrapper img {
     height: 100%;
-    padding: 2em;
+    padding: 3em;
 }
 
 .swiper-slide-styles p {

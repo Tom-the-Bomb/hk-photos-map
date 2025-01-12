@@ -25,7 +25,8 @@ const galleryWrapper = document.getElementById('gallery-wrapper')!;
 const allImages: string[] = Object.values(
     import.meta.glob('./assets/**/*.avif', { eager: true, query: '?url', import: 'default' })
 );
-console.log(allImages);
+
+let isDisplayingAllImages = true;
 
 const map = L
     .map('map', {zoomControl: false})
@@ -47,8 +48,55 @@ L.tileLayer(
 )
     .addTo(map);
 
-function getOpenGalleryHandler(images: string[]) {
+function setGalleryContent(images: string[]) {
+    if (images.length > 1) {
+        gallery.innerHTML = `
+            <div class="swiper">
+                <div class="swiper-wrapper">
+                    ${
+                        images.map((image) =>
+                            `<div class="swiper-slide swiper-slide-styles">
+                                ${getImageHTML(image)}
+                            </div>`
+                        )
+                            .join('')
+                    }
+                </div>
+            </div>`;
+
+        swiper = new Swiper('.swiper', {
+            modules: [Keyboard, EffectCoverflow],
+            effect: 'coverflow',
+            loop: true,
+            grabCursor: true,
+            centeredSlides: true,
+            keyboard: true,
+            direction: 'vertical',
+            breakpoints: {
+                768: {
+                    direction: 'horizontal',
+                },
+            },
+        });
+    } else {
+        gallery.innerHTML =
+            `<div class="swiper-slide-styles">
+                ${getImageHTML(images[0])}
+            </div>`;
+    }
+
+    gallery.querySelectorAll('.swiper-slide-styles')
+        ?.forEach(async (slide) => {
+            slide.querySelector('p')!.innerHTML = await formatImageEXIF(
+                slide.querySelector('img')!
+            );
+        });
+}
+
+function getOpenGalleryHandler(images: string[], isAllImages: boolean) {
     return async () => {
+        isDisplayingAllImages = isAllImages;
+
         map.dragging.disable();
         map.touchZoom.disable();
         map.doubleClickZoom.disable();
@@ -56,50 +104,11 @@ function getOpenGalleryHandler(images: string[]) {
         map.boxZoom.disable();
         map.keyboard.disable();
 
-        if (images.length > 1) {
-            gallery.innerHTML = `
-                <div class="swiper">
-                    <div class="swiper-wrapper">
-                        ${
-                            images.map((image) =>
-                                `<div class="swiper-slide swiper-slide-styles">
-                                    ${getImageHTML(image)}
-                                </div>`
-                            )
-                                .join('')
-                        }
-                    </div>
-                </div>`;
-
-            swiper = new Swiper('.swiper', {
-                modules: [Keyboard, EffectCoverflow],
-                effect: 'coverflow',
-                loop: true,
-                grabCursor: true,
-                centeredSlides: true,
-                keyboard: true,
-                direction: 'vertical',
-                breakpoints: {
-                    768: {
-                        direction: 'horizontal',
-                    },
-                },
-            });
-        } else {
-            gallery.innerHTML =
-                `<div class="swiper-slide-styles">
-                    ${getImageHTML(images[0])}
-                </div>`;
+        if (!isAllImages || !isDisplayingAllImages) {
+            setGalleryContent(images);
         }
 
         galleryWrapper.style.display = 'block';
-
-        gallery.querySelectorAll('.swiper-slide-styles')
-            ?.forEach(async (slide) => {
-                slide.querySelector('p')!.innerHTML = await formatImageEXIF(
-                    slide.querySelector('img')!
-                );
-            });
     }
 }
 
@@ -123,7 +132,7 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 
             const popUpElement = popUp.getElement();
 
-            popUpElement.addEventListener('click', getOpenGalleryHandler(images));
+            popUpElement.addEventListener('click', getOpenGalleryHandler(images, false));
             popUpElement.querySelector('.leaflet-popup-close-button')
                 ?.addEventListener('click', (event: Event) => {
                     event.stopPropagation();
@@ -147,6 +156,8 @@ document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     map.keyboard.enable();
 });
 
+setGalleryContent(allImages);
+
 document.getElementById('view-all')?.addEventListener('click',
-    getOpenGalleryHandler(allImages)
+    getOpenGalleryHandler(allImages, true)
 );
