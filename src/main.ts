@@ -16,7 +16,7 @@ import mtrMarkerAsset from '@assets/mtr-marker.png';
 
 let swiper: Swiper | null = null;
 
-const images: string[] = Object.values(import.meta.glob('@assets/**/*.jpg', { eager: true, query: '?url', import: 'default' }));
+const images: string[] = Object.values(import.meta.glob('@assets/**/*.avif', { eager: true, query: '?url', import: 'default' }));
 console.log(images);
 const markers = new Map<string, string[]>();
 
