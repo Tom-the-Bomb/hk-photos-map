@@ -3,7 +3,6 @@ from os import remove
 from pathlib import Path
 
 from PIL import Image
-import pillow_avif
 
 def process(
     directory: str,
@@ -24,4 +23,4 @@ def process(
             remove(file)
 
 if __name__ == '__main__':
-    process('./src/assets/', quality=70)
+    process('./src/assets/', quality=80)
