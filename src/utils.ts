@@ -53,7 +53,6 @@ export function getImageHTML(image: string) {
             <img
                 src="${image}"
                 alt="photo"
-                loading="lazy"
             />
         </div>
         <p></p>`
