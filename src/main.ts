@@ -16,7 +16,7 @@ import mtrMarkerAsset from '@assets/mtr-marker.png';
 
 let swiper: Swiper | null = null;
 
-const images = Object.values(import.meta.glob('@assets/**/*.jpg', { eager: true, query: '?url', import: 'default' }));
+const images: string[] = Object.values(import.meta.glob('@assets/**/*.jpg', { eager: true, query: '?url', import: 'default' }));
 console.log(images);
 const markers = new Map<string, string[]>();
 
@@ -51,7 +51,7 @@ L.tileLayer(
     .addTo(map);
 
 async function sortGPSData() {
-    for (const image in images) {
+    for (const image of images) {
         const {latitude, longitude} = await exifr.gps(image);
         console.log('AAAAA');
         const coord = JSON.stringify([latitude, longitude]);
