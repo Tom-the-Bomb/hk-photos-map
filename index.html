@@ -4,7 +4,11 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Hong Kong</title>
-        <link href="hk.svg" rel="icon" type="image/x-icon">
+        <link rel="icon" type="image/png" href="hk.png">
+
+        <meta name="description" property="og:description" content="An interactive map showcasing the many photos taken on my recent trip to Hong Kong"/>
+        <meta property="og:image" content="https://raw.githubusercontent.com/Tom-the-Bomb/hk-photos-map/refs/heads/main/public/hk.png">
+        <meta name="author" content="Tom the Bomb">
 
         <script type="module" src="/src/main.ts"></script>
     </head>
@@ -19,6 +23,7 @@
             <div id="map"></div>
         </main>
         <footer>
+            <button type="button" id="view-all">View All</button>
             <p>Made by <a href="https://github.com/Tom-the-Bomb/hk-photos-map">Tom-the-Bomb</a> 2025</p>
         </footer>
 

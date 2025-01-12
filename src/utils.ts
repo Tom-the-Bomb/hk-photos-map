@@ -2,7 +2,16 @@
 import L from 'leaflet';
 import exifr from 'exifr';
 
-async function formatImageEXIF(image: string) {
+const exifCache = new Map<string, string>();
+
+export async function formatImageEXIF(image: HTMLImageElement) {
+    let exif = exifCache.get(image.src);
+
+    if (exif) {
+        console.log(exif);
+        return exif;
+    }
+
     const output = await exifr.parse(
         image,
         {
@@ -19,22 +28,26 @@ async function formatImageEXIF(image: string) {
     lens = !lens && output.LensModel ? ` + ${output.LensMake ? output.LensMake + ' ' : ''}${output.LensModel}` : lens;
     const expTime = output.ExposureTime < 1 ? `1/${Math.round(1 / output.ExposureTime)}` : output.ExposureTime;
 
-    const [width, height] = await new Promise((resolve: (value: Number[]) => void) => {
-        const imageEl = new Image();
-        imageEl.src = image;
-        imageEl.onload = () => {
-            resolve([imageEl.width, imageEl.height]);
-        };
-    });
+    let width = image.naturalWidth;
+    let height = image.naturalHeight;
 
-    return (
-        `Taken with ${output.Make} ${output.Model}${lens} |
+    if (width === 0 || height === 0) {
+        [width, height] = await new Promise((resolve) => {
+            image.onload = () => {
+                resolve([image.naturalWidth, image.naturalHeight]);
+            };
+        });
+    }
+
+    exif = `Taken with ${output.Make} ${output.Model}${lens} |
         ${width}&times;${height}px at ${output.FocalLength} mm,
-        ${expTime} s, ISO ${output.ISO}, ƒ${output.FNumber}`
-    );
+        ${expTime} s, ISO ${output.ISO}, ƒ${output.FNumber}`;
+
+    exifCache.set(image.src, exif);
+    return exif;
 }
 
-export async function getImageHTML(image: string) {
+export function getImageHTML(image: string) {
     return (
         `<div class="gallery-image-wrapper">
             <img
@@ -42,7 +55,7 @@ export async function getImageHTML(image: string) {
                 alt="photo"
             />
         </div>
-        <p>${await formatImageEXIF(image)}</p>`
+        <p></p>`
     );
 }
 

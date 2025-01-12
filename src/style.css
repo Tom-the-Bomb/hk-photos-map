@@ -56,7 +56,13 @@ main {
 }
 
 footer {
-    padding: 0.5em;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 1em;
+
+    padding: 1em;
     text-align: center;
     font-family: 'JetBrains Mono', monospace;
     color: rgb(255, 200, 255);
@@ -71,6 +77,26 @@ a {
 a:hover {
     text-decoration: underline;
     text-underline-offset: 2px;
+}
+
+#view-all {
+    background-color: transparent;
+    color: rgb(255, 215, 215);
+    border: 1px solid rgb(255, 215, 215);
+    border-radius: 0.5em;
+    padding: 0.5em;
+    font-size: 1em;
+    font-family: 'JetBrains Mono', monospace;
+    width: fit-content;
+}
+
+#view-all:hover {
+    border: 1px solid white;
+    color: white;
+}
+
+#view-all:focus {
+    outline: 1px solid white;
 }
 
 #map {

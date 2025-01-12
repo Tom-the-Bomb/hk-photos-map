@@ -6,7 +6,7 @@ import { Keyboard, EffectCoverflow } from 'swiper/modules';
 
 import 'swiper/swiper-bundle.css';
 
-import { getImageHTML, getMarker } from './utils';
+import { formatImageEXIF, getImageHTML, getMarker } from './utils';
 import './style.css';
 
 import orangeMarkerAsset from './assets/orange-marker.png';
@@ -21,6 +21,10 @@ const mtrMarker = getMarker(mtrMarkerAsset);
 
 const gallery = document.getElementById('gallery')!;
 const galleryWrapper = document.getElementById('gallery-wrapper')!;
+
+const allImages: string[] = Object.values(
+    import.meta.glob('./assets/**/*.jpg', { eager: true, query: '?url', import: 'default' })
+);
 
 const map = L
     .map('map', {zoomControl: false})
@@ -42,6 +46,62 @@ L.tileLayer(
 )
     .addTo(map);
 
+function getOpenGalleryHandler(images: string[]) {
+    return async () => {
+        map.dragging.disable();
+        map.touchZoom.disable();
+        map.doubleClickZoom.disable();
+        map.scrollWheelZoom.disable();
+        map.boxZoom.disable();
+        map.keyboard.disable();
+
+        if (images.length > 1) {
+            gallery.innerHTML = `
+                <div class="swiper">
+                    <div class="swiper-wrapper">
+                        ${
+                            images.map((image) =>
+                                `<div class="swiper-slide swiper-slide-styles">
+                                    ${getImageHTML(image)}
+                                </div>`
+                            )
+                                .join('')
+                        }
+                    </div>
+                </div>`;
+
+            swiper = new Swiper('.swiper', {
+                modules: [Keyboard, EffectCoverflow],
+                effect: 'coverflow',
+                loop: true,
+                grabCursor: true,
+                centeredSlides: true,
+                keyboard: true,
+                direction: 'vertical',
+                breakpoints: {
+                    768: {
+                        direction: 'horizontal',
+                    },
+                },
+            });
+        } else {
+            gallery.innerHTML =
+                `<div class="swiper-slide-styles">
+                    ${getImageHTML(images[0])}
+                </div>`;
+        }
+
+        galleryWrapper.style.display = 'block';
+
+        gallery.querySelectorAll('.swiper-slide-styles')
+            ?.forEach(async (slide) => {
+                slide.querySelector('p')!.innerHTML = await formatImageEXIF(
+                    slide.querySelector('img')!
+                );
+            });
+    }
+}
+
 for (const [coord, rawPaths] of Object.entries(markers)) {
     const [latitude, longitude] = JSON.parse(coord);
     const images = rawPaths.map((image) =>
@@ -62,55 +122,7 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 
             const popUpElement = popUp.getElement();
 
-            popUpElement.addEventListener('click', async () => {
-                map.dragging.disable();
-                map.touchZoom.disable();
-                map.doubleClickZoom.disable();
-                map.scrollWheelZoom.disable();
-                map.boxZoom.disable();
-                map.keyboard.disable();
-
-                if (images.length > 1) {
-                    document.getElementById('gallery')!.innerHTML = `
-                        <div class="swiper">
-                            <div class="swiper-wrapper">
-                                ${
-                                    (await Promise.all(
-                                        images.map(async (image) =>
-                                            `<div class="swiper-slide swiper-slide-styles">
-                                                ${await getImageHTML(image)}
-                                            </div>`
-                                        )
-                                    ))
-                                        .join('')
-                                }
-                            </div>
-                        </div>`;
-
-                    swiper = new Swiper('.swiper', {
-                        modules: [Keyboard, EffectCoverflow],
-                        effect: 'coverflow',
-                        loop: true,
-                        grabCursor: true,
-                        centeredSlides: true,
-                        keyboard: true,
-                        direction: 'vertical',
-                        breakpoints: {
-                            768: {
-                                direction: 'horizontal',
-                            },
-                        },
-                    });
-                } else {
-                    gallery.innerHTML =
-                        `<div class="swiper-slide-styles">
-                            ${await getImageHTML(images[0])}
-                        </div>`;
-                }
-
-                galleryWrapper.style.display = 'block';
-            });
-
+            popUpElement.addEventListener('click', getOpenGalleryHandler(images));
             popUpElement.querySelector('.leaflet-popup-close-button')
                 ?.addEventListener('click', (event: Event) => {
                     event.stopPropagation();
@@ -133,3 +145,7 @@ document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
     map.boxZoom.enable();
     map.keyboard.enable();
 });
+
+document.getElementById('view-all')?.addEventListener('click',
+    getOpenGalleryHandler(allImages)
+);
