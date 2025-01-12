@@ -26,7 +26,7 @@ const allImages: string[] = Object.values(
     import.meta.glob('./assets/**/*.avif', { eager: true, query: '?url', import: 'default' })
 );
 
-let isDisplayingAllImages = true;
+let lastDisplayed = 'all';
 
 const map = L
     .map('map', {zoomControl: false})
@@ -70,6 +70,8 @@ function setGalleryContent(images: string[]) {
             grabCursor: true,
             centeredSlides: true,
             keyboard: true,
+            loop: true,
+            spaceBetween: 45,
             direction: 'vertical',
             breakpoints: {
                 768: {
@@ -92,10 +94,8 @@ function setGalleryContent(images: string[]) {
         });
 }
 
-function getOpenGalleryHandler(images: string[], isAllImages: boolean) {
+function getOpenGalleryHandler(images: string[], displaying: string) {
     return async () => {
-        isDisplayingAllImages = isAllImages;
-
         map.dragging.disable();
         map.touchZoom.disable();
         map.doubleClickZoom.disable();
@@ -103,7 +103,13 @@ function getOpenGalleryHandler(images: string[], isAllImages: boolean) {
         map.boxZoom.disable();
         map.keyboard.disable();
 
-        setGalleryContent(images);
+        if (lastDisplayed !== displaying) {
+            setGalleryContent(images);
+        } else if (swiper != null) {
+            swiper.enable();
+        }
+
+        lastDisplayed = displaying;
 
         galleryWrapper.style.display = 'block';
     }
@@ -129,7 +135,7 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 
             const popUpElement = popUp.getElement();
 
-            popUpElement.addEventListener('click', getOpenGalleryHandler(images, false));
+            popUpElement.addEventListener('click', getOpenGalleryHandler(images, coord));
             popUpElement.querySelector('.leaflet-popup-close-button')
                 ?.addEventListener('click', (event: Event) => {
                     event.stopPropagation();
@@ -138,11 +144,10 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 }
 
 document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
-    gallery.innerHTML = '';
     galleryWrapper.style.display = 'none';
 
     if (swiper != null) {
-        swiper.destroy();
+        swiper.disable();
     }
 
     map.dragging.enable();
@@ -156,5 +161,5 @@ document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
 setGalleryContent(allImages);
 
 document.getElementById('view-all')?.addEventListener('click',
-    getOpenGalleryHandler(allImages, true)
+    getOpenGalleryHandler(allImages, 'all')
 );

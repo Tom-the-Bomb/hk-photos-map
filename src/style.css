@@ -168,8 +168,8 @@ a:hover {
     display: flex;
     flex-direction: column;
     justify-content: center;
-    gap: 3em;
     align-items: center;
+    gap: 3em;
 }
 
 /* I absolutely hate CSS so much

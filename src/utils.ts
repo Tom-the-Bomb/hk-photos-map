@@ -8,7 +8,6 @@ export async function formatImageEXIF(image: HTMLImageElement) {
     let exif = exifCache.get(image.src);
 
     if (exif) {
-        console.log(exif);
         return exif;
     }
 
