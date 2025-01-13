@@ -8,7 +8,7 @@ export default defineConfig({
                     const name = asset.names[0];
 
                     if (name.endsWith('.avif')) {
-                        const subdir = name.includes('mtr') ? 'mtr' : 'others';
+                        const subdir = name.startsWith('mtr') ? 'mtr' : 'others';
                         return `assets/${subdir}/[name][extname]`;
                     }
 
