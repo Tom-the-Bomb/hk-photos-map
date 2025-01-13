@@ -74,19 +74,20 @@ function getOpenGalleryHandler(images: string[]) {
                 </div>`;
 
             const isMobile = /iPhone|iPad|iPod|Android|BlackBerry|IEMobile|Opera Mini|webOS|Windows Phone/i.test(navigator.userAgent);
-            const modules = [Keyboard, Pagination, Navigation];
+            const modules = [Pagination, Navigation];
 
             if (!isMobile) {
                 modules.push(EffectCoverflow);
+                modules.push(Keyboard);
             }
 
             swiper = new Swiper('.swiper', {
                 modules: modules,
                 effect: isMobile ? 'slide' : 'coverflow',
-                grabCursor: true,
+                grabCursor: !isMobile,
                 centeredSlides: true,
-                keyboard: true,
-                loop: true,
+                keyboard: !isMobile,
+                loop: !isMobile,
                 spaceBetween: 45,
                 direction: 'vertical',
                 breakpoints: {
