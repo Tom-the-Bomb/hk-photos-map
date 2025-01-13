@@ -199,8 +199,8 @@ a:hover {
 }
 
 .gallery-image-wrapper img {
-    min-width: 10em;
-    min-height: 10em;
+    min-width: 8em;
+    min-height: 8em;
     max-height: 100%;
     max-width: 100%;
 
