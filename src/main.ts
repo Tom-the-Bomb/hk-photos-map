@@ -73,9 +73,16 @@ function getOpenGalleryHandler(images: string[]) {
                     <div class="swiper-button-prev"></div>
                 </div>`;
 
+            const isMobile = /iPhone|iPad|iPod|Android|BlackBerry|IEMobile|Opera Mini|webOS|Windows Phone/i.test(navigator.userAgent);
+            const modules = [Keyboard, Pagination, Navigation];
+
+            if (!isMobile) {
+                modules.push(EffectCoverflow);
+            }
+
             swiper = new Swiper('.swiper', {
-                modules: [Keyboard, EffectCoverflow, Pagination, Navigation],
-                effect: 'coverflow',
+                modules: modules,
+                effect: isMobile ? 'slide' : 'coverflow',
                 grabCursor: true,
                 centeredSlides: true,
                 keyboard: true,
