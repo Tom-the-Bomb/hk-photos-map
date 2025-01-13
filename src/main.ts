@@ -74,7 +74,28 @@ function getOpenGalleryHandler(images: string[]) {
                 </div>`;
 
             swiper = new Swiper('.swiper', {
+                modules: [Keyboard, EffectCoverflow, Pagination, Navigation],
+                effect: 'coverflow',
+                grabCursor: true,
+                centeredSlides: true,
+                keyboard: true,
+                loop: true,
+                spaceBetween: 45,
                 direction: 'vertical',
+                breakpoints: {
+                    768: {
+                        direction: 'horizontal',
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
+                    },
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: images.length > 20 ? 'fraction' : 'bullets',
+                },
             });
         } else {
             gallery.innerHTML =
