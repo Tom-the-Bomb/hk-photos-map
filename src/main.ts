@@ -73,38 +73,8 @@ function getOpenGalleryHandler(images: string[]) {
                     <div class="swiper-button-prev"></div>
                 </div>`;
 
-            const isMobile = /iPhone|iPad|iPod|Android|BlackBerry|IEMobile|Opera Mini|webOS|Windows Phone/i.test(navigator.userAgent);
-            const modules = [Pagination, Navigation];
-
-            if (!isMobile) {
-                modules.push(EffectCoverflow);
-                modules.push(Keyboard);
-            }
-
             swiper = new Swiper('.swiper', {
-                modules: modules,
-                effect: isMobile ? 'slide' : 'coverflow',
-                grabCursor: !isMobile,
-                centeredSlides: true,
-                keyboard: !isMobile,
-                loop: !isMobile,
-                spaceBetween: 45,
                 direction: 'vertical',
-                breakpoints: {
-                    768: {
-                        direction: 'horizontal',
-                        navigation: {
-                            nextEl: '.swiper-button-next',
-                            prevEl: '.swiper-button-prev',
-                        },
-                    },
-                },
-                pagination: {
-                    el: '.swiper-pagination',
-                    clickable: true,
-                    type: images.length > 20 ? 'fraction' : 'bullets',
-                },
-                virtual: true,
             });
         } else {
             gallery.innerHTML =
