@@ -38,7 +38,7 @@ const map = L
 const x = import.meta.env.VITE_STADIA_API_KEY;
 console.log(x);
 L.tileLayer(
-    `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png`,
+    `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${x}`,
     {
         minZoom: 11,
         maxZoom: 19,
