@@ -144,6 +144,7 @@ for (const [coord, rawPaths] of Object.entries(markers)) {
 }
 
 document.getElementById('gallery-close-btn')?.addEventListener('click', () => {
+    gallery.innerHTML = '';
     galleryWrapper.style.display = 'none';
 
     if (swiper != null) {
