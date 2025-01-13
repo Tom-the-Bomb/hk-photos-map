@@ -198,13 +198,18 @@ a:hover {
     padding-right: 1.5em;
 }
 
+.loader {
+    z-index: 1;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 .gallery-image-wrapper img {
-    min-width: 20em;
-    min-height: 20em;
+    z-index: 2;
     max-height: 100%;
     max-width: 100%;
-
-    background: url('./assets/loading.svg') no-repeat scroll center center;
 }
 
 .swiper-slide-styles p {

@@ -2,6 +2,8 @@
 import L from 'leaflet';
 import exifr from 'exifr';
 
+import loading from './assets/loading.svg';
+
 const exifCache = new Map<string, string>();
 
 export async function formatImageEXIF(image: HTMLImageElement) {
@@ -49,6 +51,7 @@ export async function formatImageEXIF(image: HTMLImageElement) {
 export function getImageHTML(image: string) {
     return (
         `<div class="gallery-image-wrapper">
+            <img src="${loading}" class="loader"/>
             <img
                 src="${image}"
                 alt="photo"
