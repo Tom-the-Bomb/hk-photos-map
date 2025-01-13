@@ -104,6 +104,7 @@ function getOpenGalleryHandler(images: string[]) {
                     clickable: true,
                     type: images.length > 20 ? 'fraction' : 'bullets',
                 },
+                virtual: true,
             });
         } else {
             gallery.innerHTML =
