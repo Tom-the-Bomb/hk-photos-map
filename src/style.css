@@ -6,6 +6,12 @@
 
 :root {
     --map-bg-color: rgb(34, 34, 34);
+
+    --monospace-font: 'Jetbrains Mono', monospace;
+
+    --swiper-pagination-bullet-inactive-color: gray;
+    --swiper-pagination-bottom: auto;
+    --swiper-pagination-top: 1em;
 }
 
 body {
@@ -41,14 +47,15 @@ header > h3 {
     font-family: 'Ma Shan Zheng', cursive;
 }
 
-header > #date {
+#date {
     color: rgb(180, 180, 180)
 }
 
-header > #description {
+#description {
     color: rgb(180, 150, 150);
     font-size: 1em;
     font-family: 'Quicksand', sans-serif;
+    margin-bottom: 0.5em;
 }
 
 main {
@@ -64,7 +71,7 @@ footer {
 
     padding: 1em;
     text-align: center;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--monospace-font);
     color: rgb(255, 200, 255);
     font-size: 1em;
 }
@@ -86,13 +93,15 @@ a:hover {
     border-radius: 0.5em;
     padding: 0.5em;
     font-size: 1em;
-    font-family: 'JetBrains Mono', monospace;
+    font-family: var(--monospace-font);
     width: fit-content;
+    transition: transform ease 200ms;
 }
 
 #view-all:hover {
     border: 1px solid white;
     color: white;
+    transform: translateY(-2px);
 }
 
 #view-all:focus {
@@ -185,8 +194,8 @@ a:hover {
     align-items: center;
 
     padding-top: 3em;
-    padding-left: 1em;
-    padding-right: 1em;
+    padding-left: 1.5em;
+    padding-right: 1.5em;
 }
 
 .gallery-image-wrapper img {
@@ -202,4 +211,19 @@ a:hover {
     margin-bottom: 2em;
     margin-left: 1em;
     margin-right: 1em;
+}
+
+.swiper-pagination {
+    font-family: var(--monospace-font);
+    color: rgb(172, 106, 106);
+}
+
+.swiper-button-next, .swiper-button-prev {
+    color: rgb(172, 106, 106);
+}
+
+@media (max-width: 768px) {
+    .swiper-button-next, .swiper-button-prev{
+        display: none;
+    }
 }

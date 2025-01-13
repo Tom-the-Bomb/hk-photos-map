@@ -2,7 +2,7 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
 import Swiper from 'swiper';
-import { Keyboard, EffectCoverflow } from 'swiper/modules';
+import { Keyboard, EffectCoverflow, Pagination, Navigation } from 'swiper/modules';
 
 import 'swiper/swiper-bundle.css';
 
@@ -68,10 +68,13 @@ function getOpenGalleryHandler(images: string[]) {
                                 .join('')
                         }
                     </div>
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>`;
 
             swiper = new Swiper('.swiper', {
-                modules: [Keyboard, EffectCoverflow],
+                modules: [Keyboard, EffectCoverflow, Pagination, Navigation],
                 effect: 'coverflow',
                 grabCursor: true,
                 centeredSlides: true,
@@ -82,7 +85,16 @@ function getOpenGalleryHandler(images: string[]) {
                 breakpoints: {
                     768: {
                         direction: 'horizontal',
+                        navigation: {
+                            nextEl: '.swiper-button-next',
+                            prevEl: '.swiper-button-prev',
+                        },
                     },
+                },
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                    type: images.length > 20 ? 'fraction' : 'bullets',
                 },
             });
         } else {
