@@ -6,7 +6,7 @@ import { Keyboard, EffectCoverflow, Pagination, Navigation } from 'swiper/module
 
 import 'swiper/swiper-bundle.css';
 
-import { formatImageEXIF, getImageHTML, getMarker } from './utils';
+import { getImageHTML, getMarker } from './utils';
 import './style.css';
 
 import orangeMarkerAsset from './assets/orange-marker.png';
@@ -105,13 +105,6 @@ function getOpenGalleryHandler(images: string[]) {
         }
 
         galleryWrapper.style.display = 'block';
-
-        gallery.querySelectorAll('.swiper-slide-styles')
-            ?.forEach(async (slide) => {
-                slide.querySelector('p')!.innerHTML = await formatImageEXIF(
-                    slide.querySelector('img')!
-                );
-            });
     }
 }
 

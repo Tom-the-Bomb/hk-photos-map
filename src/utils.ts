@@ -1,52 +1,10 @@
 
 import L from 'leaflet';
-import exifr from 'exifr';
 
 import loading from './assets/loading.svg';
 
-const exifCache = new Map<string, string>();
-
-export async function formatImageEXIF(image: HTMLImageElement) {
-    let exif = exifCache.get(image.src);
-
-    if (exif) {
-        return exif;
-    }
-
-    const output = await exifr.parse(
-        image,
-        {
-            exif: {
-                pick: [
-                    'Make', 'Model', 'LensMake', 'LensModel',
-                    'FocalLength', 'ExposureTime', 'ISO', 'FNumber',
-                ],
-            },
-            xmp: {pick: ['Lens']},
-        },
-    );
-    let lens = output.Lens ? ` + ${output.Lens}` : '';
-    lens = !lens && output.LensModel ? ` + ${output.LensMake ? output.LensMake + ' ' : ''}${output.LensModel}` : lens;
-    const expTime = output.ExposureTime < 1 ? `1/${Math.round(1 / output.ExposureTime)}` : output.ExposureTime;
-
-    let width = image.naturalWidth;
-    let height = image.naturalHeight;
-
-    if (width === 0 || height === 0) {
-        [width, height] = await new Promise((resolve) => {
-            image.onload = () => {
-                resolve([image.naturalWidth, image.naturalHeight]);
-            };
-        });
-    }
-
-    exif = `Taken with ${output.Make} ${output.Model}${lens} |
-        ${width}&times;${height}px at ${output.FocalLength} mm,
-        ${expTime} s, ISO ${output.ISO}, ƒ${output.FNumber}`;
-
-    exifCache.set(image.src, exif);
-    return exif;
-}
+import rawExifData from './assets/exifData.json';
+const exifData: { [key: string]: string } = rawExifData;
 
 export function getImageHTML(image: string) {
     return (
@@ -58,7 +16,7 @@ export function getImageHTML(image: string) {
                 loading="lazy"
             />
         </div>
-        <p></p>`
+        <p>${exifData[image.split('/').slice(-1)[0]]}</p>`
     );
 }
 
