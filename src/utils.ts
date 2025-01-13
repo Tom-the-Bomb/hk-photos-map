@@ -1,15 +1,12 @@
 
 import L from 'leaflet';
 
-import loading from './assets/loading.svg';
-
 import rawExifData from './assets/exifData.json';
 const exifData: { [key: string]: string } = rawExifData;
 
 export function getImageHTML(image: string) {
     return (
         `<div class="gallery-image-wrapper">
-            <img src="${loading}" class="loader"/>
             <img
                 src="${image}"
                 alt="photo"
