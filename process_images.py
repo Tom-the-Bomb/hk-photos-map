@@ -32,7 +32,7 @@ def add_gps(to_add: list[tuple[str, str]]) -> None:
 
             img.save(
                 file,
-                format=file.split('.')[-1].upper(),
+                format=file.split('.')[-1].upper().replace('JPG', 'JPEG'),
                 quality=100,
                 exif=exif,
             )
@@ -105,6 +105,10 @@ if __name__ == '__main__':
     #     (r'src\assets\others\20250103_011442000_iOS.jpg', """22°17'16.8"N 114°08'19.4"E"""),
     #     # tung chung from HKG T1
     #     (r'src\assets\others\20250103_043427500_iOS.jpg', """22°18'50.9"N 113°56'08.1"E"""),
+    #
+    #     # star ferry (re-edited)
+    #     (r'src/assets/others/20241231_033000000_iOS.jpg', """22°17'11.8"N 114°09'40.6"E"""),
+    #     # HKU (re-edited)
+    #     (r'src/assets/others/20250101_025400000_iOS.jpg', """22°17'04"N 114°08'17"E"""),
     # ])
-
     compress('./src/assets/', quality=70)
