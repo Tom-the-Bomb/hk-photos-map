@@ -35,16 +35,16 @@ const map = L
         // bottom-right corner
         [21.982, 114.569],
     ]);
-const x = import.meta.env.VITE_STADIA_API_KEY;
-console.log(x);
+
 L.tileLayer(
-    `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${x}`,
+    `https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png?api_key=${import.meta.env.VITE_STADIA_API_KEY}`,
     {
         minZoom: 11,
         maxZoom: 19,
-        attribution: `&copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>
-&copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
-&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>`,
+        attribution: `
+            &copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>
+            &copy; <a href="https://openmaptiles.org/" target="_blank">OpenMapTiles</a>
+            &copy; <a href="https://www.openstreetmap.org/copyright" target="_blank">OpenStreetMap</a>`,
     }
 )
     .addTo(map);
